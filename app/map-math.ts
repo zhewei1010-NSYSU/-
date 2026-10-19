@@ -1,0 +1,5 @@
+export type MapBox = [number,number,number,number];
+export type ScreenRect = {left:number;top:number;width:number;height:number};
+export function screenFraction(box:MapBox,rect:ScreenRect,x:number,y:number):[number,number]{const scale=Math.min(rect.width/box[2],rect.height/box[3]);const w=box[2]*scale,h=box[3]*scale;return [(x-rect.left-(rect.width-w)/2)/w,(y-rect.top-(rect.height-h)/2)/h]}
+export function zoomAt(box:MapBox,base:MapBox,ratio:number,from:[number,number],to:[number,number]=from):MapBox{const current=base[2]/box[2];const next=Math.max(1,Math.min(12,current*ratio));const w=base[2]/next,h=base[3]/next;const anchor=[box[0]+from[0]*box[2],box[1]+from[1]*box[3]];return [anchor[0]-to[0]*w,anchor[1]-to[1]*h,w,h]}
+export function fitBounds(bounds:number[],base:MapBox):MapBox{const bw=bounds[2]-bounds[0],bh=bounds[3]-bounds[1];const ratio=Math.min(base[2]/Math.max(bw,1),base[3]/Math.max(bh,1));const z=Math.max(1,Math.min(12,ratio));const w=base[2]/z,h=base[3]/z;return [(bounds[0]+bounds[2]-w)/2,(bounds[1]+bounds[3]-h)/2,w,h]}
